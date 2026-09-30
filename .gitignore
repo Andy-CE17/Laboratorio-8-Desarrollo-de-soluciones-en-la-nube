@@ -10,3 +10,5 @@ static/css/styles.css
 *.log
 coverage.xml
 .coverage
+deploy/aws/app.zip
+deploy/aws/app.env

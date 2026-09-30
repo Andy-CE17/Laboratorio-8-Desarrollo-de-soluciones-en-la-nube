@@ -32,3 +32,18 @@ class Product(models.Model):
         if self.stock < 10:
             return "Stock bajo"
         return "Disponible"
+
+    @property
+    def image_kind(self):
+        name = self.name.lower()
+        if self.category == self.Category.COMPUTERS:
+            return "laptop"
+        if self.category == self.Category.MONITORS:
+            return "monitor"
+        if self.category == self.Category.COMPONENTS:
+            return "ssd"
+        if "mouse" in name or "ratón" in name:
+            return "mouse"
+        if "teclado" in name:
+            return "keyboard"
+        return "headphones"

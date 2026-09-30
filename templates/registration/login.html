@@ -3,18 +3,18 @@
 {% block body %}
 <main class="login-shell">
   <section class="login-story" aria-label="Acerca de TecnoStock">
-    <a class="brand brand-light" href="/" aria-label="TecnoStock"><span class="brand-mark">T<span>•</span></span><span>Tecno<span>Stock</span></span></a>
+    <a class="brand brand-light" href="/" aria-label="TecnoStock"><span class="brand-mark">T</span><span>Tecno<span>Stock</span></span></a>
     <div class="story-content">
       <span class="eyebrow eyebrow-light"><span class="eyebrow-line"></span> CONTROL INTELIGENTE DE INVENTARIO</span>
       <h1>Todo tu inventario.<br><em>Una sola vista.</em></h1>
-      <p>Gestiona productos y existencias con claridad, desde cualquier instancia del sistema.</p>
-      <div class="story-graphic" aria-hidden="true"><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><div class="graphic-center">T<span>•</span></div><div class="graphic-tag tag-one">Productos</div><div class="graphic-tag tag-two">Stock</div><div class="graphic-tag tag-three">Disponibilidad</div></div>
+      <p>Gestiona productos, stock y existencias con claridad, desde cualquier instancia del sistema.</p>
+      <div class="story-features" aria-label="Características"><div><span class="feature-icon">⬡</span><span><strong>Productos</strong><small>Organiza y gestiona tu inventario</small></span></div><div><span class="feature-icon">▥</span><span><strong>Stock</strong><small>Control en tiempo real</small></span></div><div><span class="feature-icon">☷</span><span><strong>Disponibilidad</strong><small>Información siempre actualizada</small></span></div></div>
     </div>
     <p class="story-footer">TecnoStock <span>©</span> 2026 · Laboratorio de soluciones en la nube</p>
   </section>
   <section class="login-panel">
     <div class="login-card">
-      <span class="mobile-brand brand"><span class="brand-mark">T<span>•</span></span><span>Tecno<span>Stock</span></span></span>
+      <span class="mobile-brand brand"><span class="brand-mark">T</span><span>Tecno<span>Stock</span></span></span>
       <span class="eyebrow">ACCESO AL SISTEMA</span>
       <h2>Bienvenido de nuevo</h2>
       <p class="muted">Ingresa tus credenciales para continuar.</p>
@@ -23,9 +23,9 @@
       <form method="post" class="form-stack">
         {% csrf_token %}
         <input type="hidden" name="next" value="{{ next }}">
-        <div class="field"><label for="id_username">Usuario</label><input id="id_username" name="username" type="text" autocomplete="username" autofocus required placeholder="Tu nombre de usuario"></div>
-        <div class="field"><label for="id_password">Contraseña</label><input id="id_password" name="password" type="password" autocomplete="current-password" required placeholder="Tu contraseña"></div>
-        <button class="button button-primary button-wide" type="submit">Ingresar <span aria-hidden="true">↗</span></button>
+        <div class="field"><label for="id_username">Usuario</label><div class="input-with-icon"><svg class="input-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7" r="3.5"/><path d="M5 20v-2.5A5.5 5.5 0 0 1 10.5 12h3A5.5 5.5 0 0 1 19 17.5V20H5Z"/></svg><input id="id_username" name="username" type="text" autocomplete="username" autofocus required placeholder="Tu nombre de usuario"></div></div>
+        <div class="field"><label for="id_password">Contraseña</label><div class="input-with-icon"><svg class="input-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4.5" y="10" width="15" height="11" rx="2"/><path d="M8 10V7a4 4 0 1 1 8 0v3"/><circle cx="12" cy="15.5" r="1"/></svg><input id="id_password" name="password" type="password" autocomplete="current-password" required placeholder="Tu contraseña"><button class="show-password" type="button" aria-label="Mostrar contraseña" onclick="const input=document.getElementById('id_password'); input.type=input.type==='password'?'text':'password'; this.setAttribute('aria-label',input.type==='password'?'Mostrar contraseña':'Ocultar contraseña');">◉</button></div></div>
+        <button class="button button-primary button-wide" type="submit">Ingresar <span aria-hidden="true">→</span></button>
       </form>
       <p class="login-note">Acceso reservado para usuarios autorizados.</p>
     </div>
