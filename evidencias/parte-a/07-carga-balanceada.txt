@@ -1,0 +1,6 @@
+URL: http://127.0.0.1/health/
+Peticiones: 1000 | Concurrencia: 50
+Tiempo total: 1.04 s
+Peticiones/s: 960.52
+Latencia promedio: 44.82 ms
+Fallos: 0

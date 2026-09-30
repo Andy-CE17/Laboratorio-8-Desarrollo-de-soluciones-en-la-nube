@@ -1,0 +1,10 @@
+
+Name           State   Publishers
+----           -----   ----------
+app-backend1-1 running {@{URL=127.0.0.1; TargetPort=8000; PublishedPort=8081; Protocol=tcp}}
+app-backend2-1 running {@{URL=127.0.0.1; TargetPort=8000; PublishedPort=8082; Protocol=tcp}}
+app-backend3-1 running {@{URL=127.0.0.1; TargetPort=8000; PublishedPort=8083; Protocol=tcp}}
+app-db-1       running {@{URL=; TargetPort=5432; PublishedPort=0; Protocol=tcp}}
+app-nginx-1    running {@{URL=0.0.0.0; TargetPort=80; PublishedPort=80; Protocol=tcp}, @{URL=::; TargetPort=80; Publish…
+
+

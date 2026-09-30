@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}Ingresar · TecnoStock{% endblock %}
+{% block body %}
+<main class="login-shell">
+  <section class="login-story" aria-label="Acerca de TecnoStock">
+    <a class="brand brand-light" href="/" aria-label="TecnoStock"><span class="brand-mark">T<span>•</span></span><span>Tecno<span>Stock</span></span></a>
+    <div class="story-content">
+      <span class="eyebrow eyebrow-light"><span class="eyebrow-line"></span> CONTROL INTELIGENTE DE INVENTARIO</span>
+      <h1>Todo tu inventario.<br><em>Una sola vista.</em></h1>
+      <p>Gestiona productos y existencias con claridad, desde cualquier instancia del sistema.</p>
+      <div class="story-graphic" aria-hidden="true"><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><div class="graphic-center">T<span>•</span></div><div class="graphic-tag tag-one">Productos</div><div class="graphic-tag tag-two">Stock</div><div class="graphic-tag tag-three">Disponibilidad</div></div>
+    </div>
+    <p class="story-footer">TecnoStock <span>©</span> 2026 · Laboratorio de soluciones en la nube</p>
+  </section>
+  <section class="login-panel">
+    <div class="login-card">
+      <span class="mobile-brand brand"><span class="brand-mark">T<span>•</span></span><span>Tecno<span>Stock</span></span></span>
+      <span class="eyebrow">ACCESO AL SISTEMA</span>
+      <h2>Bienvenido de nuevo</h2>
+      <p class="muted">Ingresa tus credenciales para continuar.</p>
+      {% if form.errors %}<div class="alert alert-error" role="alert">Usuario o contraseña incorrectos. Inténtalo de nuevo.</div>{% endif %}
+      {% if next and user.is_authenticated %}<div class="alert alert-error" role="alert">Tu cuenta no tiene acceso a esta página.</div>{% endif %}
+      <form method="post" class="form-stack">
+        {% csrf_token %}
+        <input type="hidden" name="next" value="{{ next }}">
+        <div class="field"><label for="id_username">Usuario</label><input id="id_username" name="username" type="text" autocomplete="username" autofocus required placeholder="Tu nombre de usuario"></div>
+        <div class="field"><label for="id_password">Contraseña</label><input id="id_password" name="password" type="password" autocomplete="current-password" required placeholder="Tu contraseña"></div>
+        <button class="button button-primary button-wide" type="submit">Ingresar <span aria-hidden="true">↗</span></button>
+      </form>
+      <p class="login-note">Acceso reservado para usuarios autorizados.</p>
+    </div>
+  </section>
+</main>
+{% endblock %}

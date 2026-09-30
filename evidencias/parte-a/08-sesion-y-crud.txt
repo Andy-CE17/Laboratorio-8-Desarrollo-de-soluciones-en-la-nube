@@ -1,0 +1,5 @@
+Login en backend-1: correcto
+Misma sesi�n en backend-2: correcta
+Crear producto en backend-3: correcto
+Consultar producto en backend-1: correcto
+Eliminar producto en backend-2: correcto

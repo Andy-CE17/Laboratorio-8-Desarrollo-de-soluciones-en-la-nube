@@ -1,0 +1,4 @@
+backend-1: 10 (33.3%)
+backend-2: 11 (36.7%)
+backend-3: 9 (30.0%)
+Fallos: 0

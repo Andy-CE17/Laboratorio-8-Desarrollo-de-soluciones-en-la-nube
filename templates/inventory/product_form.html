@@ -1,0 +1,8 @@
+{% extends "inventory/layout.html" %}
+{% block title %}{% if editing %}Editar producto{% else %}Nuevo producto{% endif %} · TecnoStock{% endblock %}
+{% block content %}
+<div class="form-page"><a class="back-link" href="{% url 'inventory:list' %}">← Volver al inventario</a><div class="page-head"><div><span class="eyebrow"><span class="eyebrow-line"></span> CATÁLOGO DE PRODUCTOS</span><h1>{% if editing %}Editar producto{% else %}Nuevo producto{% endif %}</h1><p>{% if editing %}Actualiza la información y guarda los cambios.{% else %}Completa los datos para añadirlo al inventario.{% endif %}</p></div></div>
+<form method="post" class="editor-card" novalidate>{% csrf_token %}{% if form.non_field_errors %}<div class="alert alert-error">{{ form.non_field_errors }}</div>{% endif %}<div class="editor-head"><span class="editor-head-icon">◫</span><div><h2>Información del producto</h2><p>Los campos marcados con * son obligatorios.</p></div></div><div class="editor-grid">
+{% for field in form %}<div class="field {% if field.name == 'description' %}field-full{% endif %}"><label for="{{ field.id_for_label }}">{{ field.label }}{% if field.field.required %} *{% endif %}</label>{{ field }}{% if field.errors %}<div class="field-error">{{ field.errors|striptags }}</div>{% endif %}</div>{% endfor %}
+</div><div class="editor-actions"><a class="button button-secondary" href="{% url 'inventory:list' %}">Cancelar</a><button type="submit" class="button button-primary">{% if editing %}Guardar cambios{% else %}Crear producto{% endif %} <span aria-hidden="true">↗</span></button></div></form></div>
+{% endblock %}

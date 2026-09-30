@@ -1,0 +1,6 @@
+URL: http://127.0.0.1:8081/health/
+Peticiones: 1000 | Concurrencia: 50
+Tiempo total: 1.52 s
+Peticiones/s: 658.39
+Latencia promedio: 70.62 ms
+Fallos: 0
