@@ -4,7 +4,18 @@ Este proyecto es la **continuación del Laboratorio 7**: parte de su aplicación
 
 ## Funcionamiento
 
-TecnoStock permite gestionar productos, stock, tiendas y reportes. Los usuarios ingresan con contraseña o con Google/GitHub y completan un segundo factor con una aplicación autenticadora. El acceso depende del rol: **administrador** (todo el sistema), **gerente** (su tienda), **ventas** (consulta y stock de su tienda) y **auditor** (solo lectura). El administrador asigna roles y tiendas en **Equipo y roles**. La aplicación bloquea temporalmente una cuenta tras cinco contraseñas incorrectas y protege la sesión con JWT en una cookie HttpOnly.
+TecnoStock permite gestionar productos, stock, tiendas y reportes. Los usuarios ingresan con contraseña o con Google/GitHub y completan un segundo factor con una aplicación autenticadora. La aplicación bloquea temporalmente una cuenta tras cinco contraseñas incorrectas y protege la sesión con JWT en una cookie HttpOnly.
+
+## Roles
+
+| Rol | Acceso |
+| --- | --- |
+| Administrador | Gestiona todas las tiendas, productos, reportes, usuarios y roles. |
+| Gerente de tienda | Gestiona productos y reportes de su tienda. |
+| Empleado de ventas | Consulta productos y actualiza el stock de su tienda. |
+| Auditor | Consulta productos y reportes sin modificarlos. |
+
+Las cuentas nuevas reciben el rol **Empleado de ventas**. El administrador puede cambiar el rol y la tienda en **Equipo y roles**.
 
 ## Enlaces
 
