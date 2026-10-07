@@ -1,8 +1,8 @@
 # TecnoStock — Laboratorio 8
 
-Esta entrega continúa TecnoStock del Laboratorio 7 en un repositorio independiente. Incorpora control de acceso por roles y tienda, registro con política de contraseñas, bloqueo temporal, verificación TOTP, JWT e inicio de sesión con Google y GitHub. El repositorio del Laboratorio 7 permanece intacto.
+**Este Laboratorio 8 es la continuación directa del Laboratorio 7.** Se retomó la misma aplicación monolítica TecnoStock de inventario y se amplió con control de acceso por roles y tienda, registro con política de contraseñas, bloqueo temporal, verificación TOTP, JWT e inicio de sesión con Google y GitHub. El trabajo del Laboratorio 8 se publica por separado; el código y las evidencias originales del Laboratorio 7 permanecen en [su repositorio](https://github.com/Andy-CE17/Laboratorio-7-Desarrolo-de-soluciones-en-la-nube).
 
-## Base del Laboratorio 7
+## Qué se construyó en el Laboratorio 7
 
 En la Parte A, Docker Compose ejecutó PostgreSQL, tres instancias de Django (`backend1`, `backend2`, `backend3`) y Nginx. Se probaron Round Robin, distribución ponderada `5:3:2`, Least Connections e IP Hash, además de la continuidad del servicio al detener una instancia. Las configuraciones están en `nginx/` y las capturas en `evidencias/parte-a/`.
 
