@@ -1,6 +1,11 @@
 .git
 .env
 .venv
+node_modules
 __pycache__
 staticfiles
 *.sqlite3
+deploy
+evidencias
+nginx
+*.zip

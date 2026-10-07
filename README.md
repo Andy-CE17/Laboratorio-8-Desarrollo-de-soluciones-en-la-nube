@@ -27,7 +27,20 @@ Las cuentas nuevas reciben el rol **Empleado de ventas**. El administrador puede
 
 Los enlaces locales funcionan cuando el servidor está en ejecución. El Laboratorio 8 no tiene un despliegue público activo.
 
-## Ejecutar en Windows
+## Ejecutar rápido con Docker
+
+Desde la carpeta `App`, crea `.env` a partir de `.env.example`, cambia `DJANGO_SECRET_KEY` y ejecuta:
+
+```powershell
+Copy-Item .env.example .env  # omite esta línea si ya tienes .env
+docker compose up -d --build
+```
+
+Abre [http://127.0.0.1:8001/login/](http://127.0.0.1:8001/login/). Docker aplica las migraciones y crea las cuentas `admin@tecnostock.local`, `gerente@tecnostock.local`, `ventas@tecnostock.local` y `auditor@tecnostock.local`. Su contraseña inicial es `DEMO_PASSWORD` de `.env`; cámbiala allí antes del **primer** arranque si deseas otra. El segundo factor se configura con el QR en el primer acceso.
+
+La base se guarda en el volumen `lab8_data`, separado de `local-dev.sqlite3`; `docker compose down` detiene la aplicación sin borrar los datos. Para Google y GitHub, coloca sus credenciales OAuth en `.env` antes de iniciar. Los retornos son `http://127.0.0.1:8001/accounts/google/login/callback/` y `http://127.0.0.1:8001/accounts/github/login/callback/`.
+
+## Ejecutar sin Docker en Windows
 
 Con Python 3.11 y Node.js instalados, desde la carpeta `App`:
 
