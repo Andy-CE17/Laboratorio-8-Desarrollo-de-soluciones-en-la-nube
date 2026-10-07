@@ -3,9 +3,16 @@ from .models import Product
 
 
 class ProductForm(forms.ModelForm):
+    def __init__(self, *args, user=None, **kwargs):
+        super().__init__(*args, **kwargs)
+        if user and not (user.is_superuser or user.role == user.Role.ADMIN):
+            self.fields.pop("store")
+        elif user:
+            self.fields["store"].required = True
+
     class Meta:
         model = Product
-        fields = ["code", "name", "category", "description", "price", "stock"]
+        fields = ["code", "name", "store", "category", "description", "price", "stock"]
         widgets = {
             "code": forms.TextInput(attrs={"placeholder": "TEC-001"}),
             "name": forms.TextInput(attrs={"placeholder": "Ej. Monitor ultrawide 34 pulgadas"}),

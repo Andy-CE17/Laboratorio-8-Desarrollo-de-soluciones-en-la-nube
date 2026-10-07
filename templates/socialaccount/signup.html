@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Completar acceso · TecnoStock{% endblock %}
+{% block body %}
+<main class="auth-scene">
+  <div class="auth-shade"></div>
+  <section class="auth-hero" aria-label="Plataforma de inventario">
+    <a class="auth-brand" href="{% url 'login' %}"><span class="auth-brand-icon">⬡</span><span>Tecno<strong>Stock</strong></span></a>
+    <div class="auth-copy"><span class="auth-kicker">PLATAFORMA DE INVENTARIO</span><h1>Gestiona tu inventario<br><em>con claridad y control</em></h1><p>Centraliza productos, stock y movimientos en una sola plataforma.</p></div>
+    <span class="auth-copyright">TecnoStock © 2026 · Acceso seguro al inventario</span>
+  </section>
+  <section class="auth-side"><div class="auth-card">
+    <span class="auth-kicker">ACCESO CON {{ account.get_provider.name|upper }}</span><span class="auth-rule"></span>
+    <h2>Completar acceso</h2>
+    <p class="auth-subtitle">Confirma el correo que usarás en TecnoStock. Si ya tienes una cuenta con ese correo, entra con tu método anterior y vincula {{ account.get_provider.name }} desde Mi perfil.</p>
+    {% if form.non_field_errors %}<div class="alert alert-error" role="alert">{{ form.non_field_errors }}</div>{% endif %}
+    <form method="post" action="{% url 'socialaccount_signup' %}" class="auth-form">{% csrf_token %}
+      {% for field in form %}<label for="{{ field.id_for_label }}">{{ field.label }}</label><div class="auth-input">{{ field }}</div>{% if field.errors %}<span class="field-error">{{ field.errors|striptags }}</span>{% endif %}{% endfor %}
+      {{ redirect_field }}
+      <button class="auth-submit" type="submit"><span class="auth-submit-label">Continuar</span><span class="auth-submit-arrow" aria-hidden="true">→</span></button>
+    </form>
+    <p class="auth-register"><a href="{% url 'login' %}">Volver al inicio de sesión</a></p>
+  </div></section>
+</main>
+{% endblock %}

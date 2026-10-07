@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Verificación de seguridad · TecnoStock{% endblock %}
+{% block body %}
+<main class="auth-scene auth-simple"><div class="auth-shade"></div><section class="auth-side"><div class="auth-card">
+  <a class="auth-brand dark" href="{% url 'login' %}"><span class="auth-brand-icon">⬡</span><span>Tecno<strong>Stock</strong></span></a>
+  <span class="auth-kicker">SEGUNDO FACTOR</span><span class="auth-rule"></span><h2>Verifica tu identidad</h2>
+  {% if enrolling %}<p class="auth-subtitle">Escanea el QR con Google Authenticator, Microsoft Authenticator u otra app TOTP. Luego ingresa el código de 6 dígitos.</p><img class="mfa-qr" src="data:image/png;base64,{{ qr }}" alt="Código QR para configurar la autenticación"><p class="mfa-secret">Clave manual: <code>{{ secret }}</code></p>{% else %}<p class="auth-subtitle">Ingresa el código de 6 dígitos de tu aplicación autenticadora. Cambia cada 30 segundos.</p>{% endif %}
+  {% if error %}<div class="alert alert-error" role="alert">{{ error }}</div>{% endif %}
+  <form method="post" class="auth-form">{% csrf_token %}<label for="id_code">Código de verificación</label><div class="auth-input"><input id="id_code" name="code" type="text" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" autocomplete="one-time-code" required placeholder="000000"></div><button class="auth-submit" type="submit"><span class="auth-submit-label">Verificar acceso</span><span class="auth-submit-arrow" aria-hidden="true">→</span></button></form>
+  <p class="auth-register">Máximo 3 intentos por acceso.</p>
+  <form method="post" action="{% url 'logout' %}" class="auth-cancel">{% csrf_token %}<button type="submit">Volver al inicio</button></form>
+</div></section></main>
+{% endblock %}

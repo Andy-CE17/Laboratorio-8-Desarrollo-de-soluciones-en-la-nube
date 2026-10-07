@@ -1,0 +1,16 @@
+{% extends "inventory/layout.html" %}
+{% block title %}Tiendas · TecnoStock{% endblock %}
+{% block content %}
+<section class="dashboard-intro"><div><span class="dashboard-kicker">CONFIGURACIÓN</span><h1>Tiendas<span>.</span></h1><p>Organiza las ubicaciones que comparten la plataforma.</p></div></section>
+<div class="store-dashboard">
+  <section class="lab8-catalog store-list">
+    <div class="catalog-heading"><div><span class="dashboard-kicker">UBICACIONES</span><h2>Tiendas registradas</h2></div><span class="catalog-count">{{ stores|length }} en total</span></div>
+    <div class="table-scroll"><table><thead><tr><th>Tienda</th><th>Ubicación</th><th>Productos</th><th>Acción</th></tr></thead><tbody>{% for store in stores %}<tr><td><div class="store-name"><span aria-hidden="true">⌂</span><strong>{{ store.name }}</strong></div></td><td>{{ store.location|default:"Sin ubicación" }}</td><td><span class="stock-badge">{{ store.product_count }} productos</span></td><td><a class="button button-secondary table-action" href="{% url 'store-edit' store.pk %}">Editar <span aria-hidden="true">↗</span></a></td></tr>{% empty %}<tr><td colspan="4" class="empty-state">Aún no hay tiendas registradas.</td></tr>{% endfor %}</tbody></table></div>
+  </section>
+  <section class="lab8-catalog store-creation">
+    <div class="catalog-heading"><div><span class="dashboard-kicker">NUEVA UBICACIÓN</span><h2>Agregar tienda</h2></div></div>
+    <p class="panel-description">Registra una tienda para asignar después a usuarios y productos.</p>
+    <form method="post" class="store-form">{% csrf_token %}{% for field in form %}<div class="field"><label for="{{ field.id_for_label }}">{{ field.label }}</label>{{ field }}{% if field.errors %}<span class="field-error">{{ field.errors|striptags }}</span>{% endif %}</div>{% endfor %}<button class="button button-primary" type="submit">Crear tienda <span aria-hidden="true">↗</span></button></form>
+  </section>
+</div>
+{% endblock %}

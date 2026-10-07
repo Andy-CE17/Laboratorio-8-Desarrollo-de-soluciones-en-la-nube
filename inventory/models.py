@@ -11,6 +11,7 @@ class Product(models.Model):
         OTHER = "otros", "Otros"
 
     code = models.CharField("código", max_length=20, unique=True)
+    store = models.ForeignKey("accounts.Store", null=True, blank=True, on_delete=models.PROTECT, related_name="products")
     name = models.CharField("nombre", max_length=120)
     category = models.CharField("categoría", max_length=20, choices=Category.choices)
     description = models.TextField("descripción", blank=True)

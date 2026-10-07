@@ -1,0 +1,26 @@
+{% extends "inventory/layout.html" %}
+{% load socialaccount %}
+{% block title %}Mi perfil · TecnoStock{% endblock %}
+{% block content %}
+<div class="form-page profile-page">
+  <div class="page-head"><div><span class="dashboard-kicker">CUENTA PERSONAL</span><h1>Mi perfil</h1><p>Actualiza la imagen que verán los demás miembros del equipo.</p></div></div>
+  <section class="editor-card profile-card">
+    <div class="profile-identity">
+      <span class="profile-preview profile-avatar">{% if user.avatar_url %}<img src="{{ user.avatar_url }}" alt="" referrerpolicy="no-referrer" onerror="this.remove()">{% endif %}<span>{{ user.full_name|default:user.email|slice:":1"|upper }}</span></span>
+      <div><h2>{{ user.full_name|default:user.username }}</h2><p>{{ user.email }}</p><span class="role-pill">{{ user.get_role_display }}</span></div>
+    </div>
+    <form method="post" class="profile-form">{% csrf_token %}
+      <div class="field"><label for="{{ form.avatar_url.id_for_label }}">{{ form.avatar_url.label }}</label>{{ form.avatar_url }}{% if form.avatar_url.errors %}<span class="field-error">{{ form.avatar_url.errors|striptags }}</span>{% endif %}<p class="field-help">Pega un enlace HTTPS directo a una imagen. Déjalo vacío para volver a mostrar tu inicial.</p></div>
+      <div class="editor-actions"><a class="button button-secondary" href="{% url 'inventory:list' %}">Volver al inventario</a><button class="button button-primary" type="submit">Guardar foto</button></div>
+    </form>
+    <div class="social-connections">
+      <h2>Accesos vinculados</h2>
+      <p>Vincula Google o GitHub para entrar con la misma cuenta y conservar tu rol y tienda.</p>
+      <div class="social-connect-grid">
+        {% if google_ready %}{% if 'google' in connected_providers %}<span class="social-connected"><span class="google-g" aria-hidden="true">G</span> Google conectado</span>{% else %}<form method="post" action="{% provider_login_url 'google' process='connect' %}">{% csrf_token %}<button class="social-button social-google" type="submit"><span class="google-g" aria-hidden="true">G</span> Vincular Google</button></form>{% endif %}{% endif %}
+        {% if github_ready %}{% if 'github' in connected_providers %}<span class="social-connected">◉ GitHub conectado</span>{% else %}<form method="post" action="{% provider_login_url 'github' process='connect' %}">{% csrf_token %}<button class="social-button social-github" type="submit">◉ Vincular GitHub</button></form>{% endif %}{% endif %}
+      </div>
+    </div>
+  </section>
+</div>
+{% endblock %}

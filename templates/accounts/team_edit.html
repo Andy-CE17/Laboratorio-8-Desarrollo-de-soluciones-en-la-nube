@@ -1,0 +1,6 @@
+{% extends "inventory/layout.html" %}
+{% block title %}Editar permisos · TecnoStock{% endblock %}
+{% block content %}
+<div class="form-page"><a class="back-link" href="{% url 'team' %}">← Volver al equipo</a><div class="page-head"><div><span class="dashboard-kicker">ADMINISTRACIÓN</span><h1>Editar permisos</h1><p>{{ member.email }}</p></div></div>
+<form method="post" class="editor-card">{% csrf_token %}<div class="editor-head"><span class="editor-head-icon">♧</span><div><h2>Perfil y acceso</h2><p>El rol determina qué acciones puede realizar este usuario.</p></div></div><div class="editor-grid">{% for field in form %}<div class="field"><label for="{{ field.id_for_label }}">{{ field.label }}</label>{{ field }}{% if field.errors %}<span class="field-error">{{ field.errors|striptags }}</span>{% endif %}</div>{% endfor %}</div><div class="editor-actions"><a class="button button-secondary" href="{% url 'team' %}">Cancelar</a><button class="button button-primary" type="submit">Guardar cambios</button></div></form></div>
+{% endblock %}

@@ -5,6 +5,7 @@ from decimal import Decimal
 from django.contrib.auth import get_user_model
 from django.core.management.base import BaseCommand
 
+from accounts.models import Store
 from inventory.models import Product
 
 
@@ -18,21 +19,28 @@ SAMPLES = [
 
 
 class Command(BaseCommand):
-    help = "Crea un usuario de demostración y productos de ejemplo"
+    help = "Prepara tiendas, cuatro roles y productos de demostración"
 
     def handle(self, *args, **options):
         User = get_user_model()
-        user, created = User.objects.get_or_create(username="laboratorio")
-        if created:
-            password = os.environ.get("DEMO_PASSWORD") or secrets.token_urlsafe(14)
-            user.set_password(password)
-            user.save(update_fields=["password"])
-            self.stdout.write(f"Usuario: laboratorio | Contraseña inicial: {password}")
-        else:
-            self.stdout.write("El usuario laboratorio ya existe; su contraseña no cambió.")
-        for code, name, category, price, stock, description in SAMPLES:
+        central, _ = Store.objects.get_or_create(name="Tienda Central", defaults={"location": "Lima"})
+        norte, _ = Store.objects.get_or_create(name="Tienda Norte", defaults={"location": "Lima Norte"})
+        password = os.environ.get("DEMO_PASSWORD") or ("D" + secrets.token_urlsafe(14) + "7!")
+        people = [
+            ("administrador", "admin@tecnostock.local", "Andrea Administradora", User.Role.ADMIN, None),
+            ("gerente", "gerente@tecnostock.local", "Marco Gerente", User.Role.MANAGER, central),
+            ("ventas", "ventas@tecnostock.local", "Valeria Ventas", User.Role.SALES, central),
+            ("auditor", "auditor@tecnostock.local", "Alex Auditor", User.Role.AUDITOR, None),
+        ]
+        for username, email, full_name, role, store in people:
+            if not User.objects.filter(username=username).exists():
+                User.objects.create_user(username=username, email=email, password=password,
+                                         full_name=full_name, role=role, store=store)
+                self.stdout.write(f"Cuenta de ejemplo: {email}")
+        for index, (code, name, category, price, stock, description) in enumerate(SAMPLES):
             Product.objects.get_or_create(code=code, defaults={
-                "name": name, "category": category, "price": price,
-                "stock": stock, "description": description,
+                "name": name, "store": central if index < 4 else norte,
+                "category": category, "price": price, "stock": stock,
+                "description": description,
             })
-        self.stdout.write(self.style.SUCCESS("Datos de demostración preparados."))
+        self.stdout.write(self.style.SUCCESS("Datos de ejemplo listos. Contraseña inicial: " + password))

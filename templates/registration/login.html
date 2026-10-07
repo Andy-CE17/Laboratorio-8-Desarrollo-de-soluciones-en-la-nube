@@ -1,34 +1,66 @@
 {% extends "base.html" %}
-{% block title %}Ingresar · TecnoStock{% endblock %}
+{% load socialaccount %}
+{% block title %}{% if show_register %}Crear cuenta{% else %}Ingresar{% endif %} · TecnoStock{% endblock %}
 {% block body %}
-<main class="login-shell">
-  <section class="login-story" aria-label="Acerca de TecnoStock">
-    <a class="brand brand-light" href="/" aria-label="TecnoStock"><span class="brand-mark">T</span><span>Tecno<span>Stock</span></span></a>
-    <div class="story-content">
-      <span class="eyebrow eyebrow-light"><span class="eyebrow-line"></span> CONTROL INTELIGENTE DE INVENTARIO</span>
-      <h1>Todo tu inventario.<br><em>Una sola vista.</em></h1>
-      <p>Gestiona productos, stock y existencias con claridad, desde cualquier instancia del sistema.</p>
-      <div class="story-features" aria-label="Características"><div><span class="feature-icon">⬡</span><span><strong>Productos</strong><small>Organiza y gestiona tu inventario</small></span></div><div><span class="feature-icon">▥</span><span><strong>Stock</strong><small>Control en tiempo real</small></span></div><div><span class="feature-icon">☷</span><span><strong>Disponibilidad</strong><small>Información siempre actualizada</small></span></div></div>
+<main class="auth-scene">
+  <div class="auth-shade"></div>
+  <section class="auth-hero" aria-label="Plataforma de inventario">
+    <a class="auth-brand" href="{% url 'login' %}"><span class="auth-brand-icon">⬡</span><span>Tecno<strong>Stock</strong></span></a>
+    <div class="auth-copy">
+      <span class="auth-kicker">PLATAFORMA DE INVENTARIO</span>
+      <h1>Gestiona tu inventario<br><em>con claridad y control</em></h1>
+      <p>Centraliza productos, stock y movimientos en una sola plataforma.</p>
+      <div class="auth-features"><div><span>⬡</span><strong>Productos</strong><small>Organiza y gestiona tu inventario.</small></div><div><span>▥</span><strong>Stock en tiempo real</strong><small>Conoce la disponibilidad al instante.</small></div><div><span>▤</span><strong>Reportes</strong><small>Toma mejores decisiones.</small></div></div>
     </div>
-    <p class="story-footer">TecnoStock <span>©</span> 2026 · Laboratorio de soluciones en la nube</p>
+    <span class="auth-copyright">TecnoStock © 2026 · Acceso seguro al inventario</span>
   </section>
-  <section class="login-panel">
-    <div class="login-card">
-      <span class="mobile-brand brand"><span class="brand-mark">T</span><span>Tecno<span>Stock</span></span></span>
-      <span class="eyebrow">ACCESO AL SISTEMA</span>
-      <h2>Bienvenido de nuevo</h2>
-      <p class="muted">Ingresa tus credenciales para continuar.</p>
-      {% if form.errors %}<div class="alert alert-error" role="alert">Usuario o contraseña incorrectos. Inténtalo de nuevo.</div>{% endif %}
-      {% if next and user.is_authenticated %}<div class="alert alert-error" role="alert">Tu cuenta no tiene acceso a esta página.</div>{% endif %}
-      <form method="post" class="form-stack">
-        {% csrf_token %}
-        <input type="hidden" name="next" value="{{ next }}">
-        <div class="field"><label for="id_username">Usuario</label><div class="input-with-icon"><svg class="input-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7" r="3.5"/><path d="M5 20v-2.5A5.5 5.5 0 0 1 10.5 12h3A5.5 5.5 0 0 1 19 17.5V20H5Z"/></svg><input id="id_username" name="username" type="text" autocomplete="username" autofocus required placeholder="Tu nombre de usuario"></div></div>
-        <div class="field"><label for="id_password">Contraseña</label><div class="input-with-icon"><svg class="input-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4.5" y="10" width="15" height="11" rx="2"/><path d="M8 10V7a4 4 0 1 1 8 0v3"/><circle cx="12" cy="15.5" r="1"/></svg><input id="id_password" name="password" type="password" autocomplete="current-password" required placeholder="Tu contraseña"><button class="show-password" type="button" aria-label="Mostrar contraseña" onclick="const input=document.getElementById('id_password'); input.type=input.type==='password'?'text':'password'; this.setAttribute('aria-label',input.type==='password'?'Mostrar contraseña':'Ocultar contraseña');">◉</button></div></div>
-        <button class="button button-primary button-wide" type="submit">Ingresar <span aria-hidden="true">→</span></button>
+  <section class="auth-side">
+    <div class="auth-card">
+      <div class="auth-panel" id="login-panel" {% if show_register %}hidden{% endif %}>
+      <span class="auth-kicker">ACCESO AL SISTEMA</span><span class="auth-rule"></span>
+      <h2>Bienvenido de nuevo</h2><p class="auth-subtitle">Ingresa tus credenciales para continuar.</p>
+      {% if error %}<div class="alert alert-error" role="alert">{{ error }}</div>{% endif %}
+      {% if messages %}{% for message in messages %}<div class="alert alert-error" role="alert">{{ message }}</div>{% endfor %}{% endif %}
+      <form method="post" class="auth-form">{% csrf_token %}<input type="hidden" name="next" value="{{ next }}">
+        <label for="id_email">Correo electrónico</label><div class="auth-input"><span>♙</span><input id="id_email" name="email" type="email" autocomplete="username" {% if not show_register %}autofocus{% endif %} required placeholder="tu@correo.com"></div>
+        <label for="id_password">Contraseña</label><div class="auth-input"><span>♧</span><input id="id_password" name="password" type="password" autocomplete="current-password" required placeholder="Tu contraseña"><button type="button" aria-label="Mostrar contraseña" onclick="const f=document.getElementById('id_password');f.type=f.type==='password'?'text':'password';">◉</button></div>
+        <button class="auth-submit" type="submit"><span class="auth-submit-label">Ingresar</span><span class="auth-submit-arrow" aria-hidden="true">→</span></button>
       </form>
-      <p class="login-note">Acceso reservado para usuarios autorizados.</p>
+      <div class="auth-divider"><span>o continúa con</span></div>
+      <div class="social-grid">
+        {% if google_ready %}<form method="post" action="{% provider_login_url 'google' %}">{% csrf_token %}<button class="social-button social-google" type="submit"><span class="google-g" aria-hidden="true">G</span><span>Iniciar sesión con Google</span></button></form>{% else %}<span class="social-button social-google disabled" title="Configura GOOGLE_CLIENT_ID y GOOGLE_CLIENT_SECRET"><span class="google-g" aria-hidden="true">G</span><span>Iniciar sesión con Google</span><small>pendiente</small></span>{% endif %}
+        {% if github_ready %}<form method="post" action="{% provider_login_url 'github' %}">{% csrf_token %}<button class="social-button social-github" type="submit"><svg class="social-github-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 1.8a10.2 10.2 0 0 0-3.23 19.88c.51.09.7-.22.7-.49v-1.9c-2.84.62-3.44-1.2-3.44-1.2-.47-1.19-1.14-1.51-1.14-1.51-.93-.64.07-.63.07-.63 1.03.07 1.57 1.05 1.57 1.05.92 1.56 2.42 1.11 3.01.85.09-.66.36-1.11.65-1.37-2.27-.26-4.66-1.14-4.66-5.06 0-1.12.4-2.04 1.05-2.75-.1-.26-.46-1.3.1-2.72 0 0 .86-.27 2.81 1.05A9.8 9.8 0 0 1 12 6.95c.87 0 1.73.12 2.55.35 1.95-1.32 2.8-1.05 2.8-1.05.56 1.42.21 2.46.11 2.72.66.71 1.04 1.63 1.04 2.75 0 3.93-2.4 4.8-4.69 5.05.37.32.7.95.7 1.92v2.5c0 .28.19.59.71.49A10.2 10.2 0 0 0 12 1.8Z"/></svg><span>Iniciar sesión con GitHub</span></button></form>{% else %}<span class="social-button social-github disabled" title="Configura GITHUB_CLIENT_ID y GITHUB_CLIENT_SECRET"><span class="github-mark" aria-hidden="true">●</span><span>Iniciar sesión con GitHub</span><small>pendiente</small></span>{% endif %}
+      </div>
+      <p class="auth-register">¿Aún no tienes cuenta? <a href="{% url 'register' %}" data-auth-open="register">Crear cuenta</a></p>
+      <div class="auth-card-footer">Acceso reservado para usuarios autorizados.</div>
+      </div>
+      <div class="auth-panel auth-panel-register" id="register-panel" {% if not show_register %}hidden{% endif %}>
+        <span class="auth-kicker">NUEVA CUENTA</span><span class="auth-rule"></span>
+        <h2>Crear cuenta</h2><p class="auth-subtitle">Completa tus datos para unirte a tu tienda.</p>
+        <p class="registration-role">Rol inicial: <strong>Empleado de ventas</strong><span>El administrador puede cambiarlo después en Equipo y roles.</span></p>
+        {% if registration_form.non_field_errors %}<div class="alert alert-error" role="alert">{{ registration_form.non_field_errors }}</div>{% endif %}
+        <form method="post" action="{% url 'register' %}" class="auth-form register-form" autocomplete="off">{% csrf_token %}
+          {% for field in registration_form %}<label for="{{ field.id_for_label }}">{{ field.label }}</label><div class="auth-input">{{ field }}</div>{% if field.errors %}<span class="field-error">{{ field.errors|striptags }}</span>{% endif %}{% endfor %}
+          <p class="password-hint">Mínimo 8 caracteres, una mayúscula, un número y un símbolo.</p>
+          <button class="auth-submit" type="submit"><span class="auth-submit-label">Crear cuenta</span><span class="auth-submit-arrow" aria-hidden="true">→</span></button>
+        </form>
+        <p class="auth-register">¿Ya tienes cuenta? <a href="{% url 'login' %}" data-auth-open="login">Iniciar sesión</a></p>
+      </div>
     </div>
   </section>
 </main>
+<script>
+  document.querySelectorAll('[data-auth-open]').forEach(link => {
+    link.addEventListener('click', event => {
+      event.preventDefault();
+      const register = link.dataset.authOpen === 'register';
+      document.getElementById('login-panel').hidden = register;
+      document.getElementById('register-panel').hidden = !register;
+      document.title = (register ? 'Crear cuenta' : 'Ingresar') + ' · TecnoStock';
+      document.querySelector('.auth-card').scrollTop = 0;
+      document.querySelector('.auth-side').scrollIntoView({block: 'start', behavior: 'smooth'});
+      document.querySelector(register ? '#id_register_full_name' : '#id_email').focus();
+    });
+  });
+</script>
 {% endblock %}

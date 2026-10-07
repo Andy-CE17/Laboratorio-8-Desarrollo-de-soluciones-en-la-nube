@@ -1,0 +1,5 @@
+{% extends "inventory/layout.html" %}
+{% block title %}Editar tienda · TecnoStock{% endblock %}
+{% block content %}
+<div class="form-page"><a class="back-link" href="{% url 'stores' %}">← Volver a tiendas</a><div class="page-head"><div><span class="dashboard-kicker">CONFIGURACIÓN</span><h1>Editar tienda</h1><p>{{ store.name }}</p></div></div><form method="post" class="editor-card">{% csrf_token %}<div class="editor-head"><span class="editor-head-icon">⌂</span><div><h2>Datos de la tienda</h2><p>Esta ubicación puede asignarse a usuarios y productos.</p></div></div><div class="editor-grid">{% for field in form %}<div class="field"><label for="{{ field.id_for_label }}">{{ field.label }}</label>{{ field }}{% if field.errors %}<span class="field-error">{{ field.errors|striptags }}</span>{% endif %}</div>{% endfor %}</div><div class="editor-actions"><a class="button button-secondary" href="{% url 'stores' %}">Cancelar</a><button class="button button-primary" type="submit">Guardar cambios</button></div></form></div>
+{% endblock %}

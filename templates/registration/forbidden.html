@@ -1,0 +1,3 @@
+{% extends "inventory/layout.html" %}
+{% block title %}Acceso restringido · TecnoStock{% endblock %}
+{% block content %}<div class="empty-panel"><span class="empty-symbol">◇</span><h1>Acceso restringido</h1><p>Tu rol no tiene permiso para realizar esta acción.</p><a class="button button-primary" href="{% url 'inventory:list' %}">Volver al inventario</a></div>{% endblock %}

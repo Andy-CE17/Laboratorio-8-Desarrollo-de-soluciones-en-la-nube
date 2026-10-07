@@ -1,21 +1,25 @@
 {% extends "base.html" %}
 {% block body %}
-<div class="app-shell">
-  <aside class="sidebar">
-    <a class="brand sidebar-brand" href="{% url 'inventory:list' %}"><span>Tecno<span>Stock</span></span><small>Gestión de inventario</small></a>
+<div class="app-shell lab8-shell">
+  <aside class="sidebar lab8-sidebar">
+    <a class="brand sidebar-brand" href="{% url 'inventory:list' %}"><span class="side-logo">⬡</span><span>Tecno<span>Stock</span><small>Control de inventario</small></span></a>
+    <span class="side-section">ESPACIO DE TRABAJO</span>
     <nav aria-label="Navegación principal">
-      <a class="nav-link active" href="{% url 'inventory:list' %}"><span class="nav-icon">▣</span> Productos</a>
-      <a class="nav-link" href="{% url 'inventory:list' %}#filtros"><span class="nav-icon">◆</span> Categorías</a>
-      <form method="post" action="{% url 'logout' %}">{% csrf_token %}<button class="nav-link nav-button" type="submit"><span class="nav-icon">⇥</span> Salir</button></form>
+      <a class="nav-link {% if request.resolver_match.url_name == 'list' %}active{% endif %}" href="{% url 'inventory:list' %}"><span class="nav-icon">▣</span> Inventario</a>
+      {% if user.can_view_reports %}<a class="nav-link {% if request.resolver_match.url_name == 'reports' %}active{% endif %}" href="{% url 'inventory:reports' %}"><span class="nav-icon">▥</span> Reportes</a>{% endif %}
+      {% if user.can_manage_users %}<a class="nav-link {% if request.resolver_match.url_name == 'team' %}active{% endif %}" href="{% url 'team' %}"><span class="nav-icon">♧</span> Equipo y roles</a>{% endif %}
+      {% if user.can_manage_users %}<a class="nav-link {% if request.resolver_match.url_name == 'stores' %}active{% endif %}" href="{% url 'stores' %}"><span class="nav-icon">◇</span> Tiendas</a>{% endif %}
+      <a class="nav-link {% if request.resolver_match.url_name == 'profile' %}active{% endif %}" href="{% url 'profile' %}"><span class="nav-icon">◉</span> Mi perfil</a>
     </nav>
+    <div class="sidebar-bottom"><div class="side-store"><span>TIENDA ASIGNADA</span><strong>{% if user.store %}{{ user.store.name }}{% else %}Todas las tiendas{% endif %}</strong></div><form method="post" action="{% url 'logout' %}">{% csrf_token %}<button class="nav-link nav-button" type="submit"><span class="nav-icon">⇥</span> Cerrar sesión</button></form></div>
   </aside>
   <div class="main-column">
-    <header class="topbar"><div class="topbar-right"><div class="avatar" title="{{ user.username }}">●</div><span class="username">{{ user.username }}</span><span class="account-arrow">⌄</span></div></header>
-    <main class="content">
-      {% if messages %}<div class="messages" role="status">{% for message in messages %}<div class="alert alert-success">{{ message }}</div>{% endfor %}</div>{% endif %}
+    <header class="topbar lab8-topbar"><div class="topbar-start"><span class="topbar-kicker">TECNOSTOCK / PANEL</span><strong>Tu espacio de trabajo</strong></div><div class="topbar-right"><span class="role-pill">{{ user.get_role_display }}</span><a class="avatar profile-avatar" href="{% url 'profile' %}" title="Cambiar foto de perfil" aria-label="Cambiar foto de perfil">{% if user.avatar_url %}<img src="{{ user.avatar_url }}" alt="" referrerpolicy="no-referrer" onerror="this.remove()">{% endif %}<span>{{ user.full_name|default:user.email|slice:":1"|upper }}</span></a><div class="account-meta"><strong>{{ user.full_name|default:user.username }}</strong><small>{{ user.email }}</small></div><form method="post" action="{% url 'logout' %}" class="mobile-logout">{% csrf_token %}<button type="submit" aria-label="Cerrar sesión">⇥</button></form></div></header>
+    <main class="content lab8-content">
+      {% if messages %}<div class="messages" role="status">{% for message in messages %}<div class="alert {% if message.tags == 'error' %}alert-error{% else %}alert-success{% endif %}">{{ message }}</div>{% endfor %}</div>{% endif %}
       {% block content %}{% endblock %}
     </main>
-    <footer class="app-footer"><span class="system-dot"></span> Servidor: {{ instance_name }}</footer>
+    <footer class="app-footer"><span class="system-dot"></span> Sesión protegida · {{ instance_name }}</footer>
   </div>
 </div>
 {% endblock %}
