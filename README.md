@@ -1,16 +1,22 @@
 # TecnoStock — Laboratorio 8
 
-**Este Laboratorio 8 es la continuación directa del Laboratorio 7.** Se retomó la misma aplicación monolítica TecnoStock de inventario y se amplió con control de acceso por roles y tienda, registro con política de contraseñas, bloqueo temporal, verificación TOTP, JWT e inicio de sesión con Google y GitHub. El trabajo del Laboratorio 8 se publica por separado; el código y las evidencias originales del Laboratorio 7 permanecen en [su repositorio](https://github.com/Andy-CE17/Laboratorio-7-Desarrolo-de-soluciones-en-la-nube).
+Este proyecto es la **continuación del Laboratorio 7**: parte de su aplicación Django de inventario y agrega autenticación y control de acceso. El [repositorio del Laboratorio 7](https://github.com/Andy-CE17/Laboratorio-7-Desarrolo-de-soluciones-en-la-nube) conserva la práctica de balanceo de carga con Docker, Nginx y AWS.
 
-## Qué se construyó en el Laboratorio 7
+## Funcionamiento
 
-En la Parte A, Docker Compose ejecutó PostgreSQL, tres instancias de Django (`backend1`, `backend2`, `backend3`) y Nginx. Se probaron Round Robin, distribución ponderada `5:3:2`, Least Connections e IP Hash, además de la continuidad del servicio al detener una instancia. Las configuraciones están en `nginx/` y las capturas en `evidencias/parte-a/`.
+TecnoStock permite gestionar productos, stock, tiendas y reportes. Los usuarios ingresan con contraseña o con Google/GitHub y completan un segundo factor con una aplicación autenticadora. El acceso depende del rol: **administrador** (todo el sistema), **gerente** (su tienda), **ventas** (consulta y stock de su tienda) y **auditor** (solo lectura). El administrador asigna roles y tiendas en **Equipo y roles**. La aplicación bloquea temporalmente una cuenta tras cinco contraseñas incorrectas y protege la sesión con JWT en una cookie HttpOnly.
 
-En la Parte B, la aplicación se desplegó en AWS con un Application Load Balancer público, dos EC2 en distintas zonas de disponibilidad y PostgreSQL RDS compartido. El grupo de destino comprobaba `/health/`; CloudFront proporcionó HTTPS al navegador. Se verificó el reparto de solicitudes, el estado compartido y la recuperación tras reiniciar una instancia. Los recursos de AWS de esa práctica se eliminaron al terminar para evitar cargos. Los archivos de despliegue permanecen en `deploy/aws/` como código del laboratorio.
+## Enlaces
 
-## Laboratorio 8: identidad y permisos
+- [Laboratorio 8 en GitHub](https://github.com/Andy-CE17/Laboratorio-8-Desarrollo-de-soluciones-en-la-nube)
+- [Laboratorio 7 en GitHub](https://github.com/Andy-CE17/Laboratorio-7-Desarrolo-de-soluciones-en-la-nube)
+- Aplicación local: [http://127.0.0.1:8001/](http://127.0.0.1:8001/)
+- Inicio de sesión: [http://127.0.0.1:8001/login/](http://127.0.0.1:8001/login/)
+- Reportes: [http://127.0.0.1:8001/reports/](http://127.0.0.1:8001/reports/)
 
-## Ejecutar localmente
+Los enlaces locales funcionan cuando el servidor está en ejecución. El Laboratorio 8 no tiene un despliegue público activo.
+
+## Ejecutar en Windows
 
 Con Python 3.11 y Node.js instalados, desde la carpeta `App`:
 
@@ -20,43 +26,9 @@ python -m venv .venv
 npm ci
 npm run build:css
 Copy-Item .env.example .env
-```
-
-Edita `.env` para asignar un `DJANGO_SECRET_KEY` aleatorio, `DJANGO_DEBUG=1`, `DJANGO_CSRF_TRUSTED_ORIGINS=http://127.0.0.1:8001` y, si deseas una contraseña reproducible para las cuentas de ejemplo, `DEMO_PASSWORD`. El valor `DATABASE_URL=sqlite:///local-dev.sqlite3` es solo para la ejecución local.
-
-```powershell
 .\.venv\Scripts\python.exe manage.py migrate
 .\.venv\Scripts\python.exe manage.py seed_demo
 .\.venv\Scripts\python.exe manage.py runserver 127.0.0.1:8001
 ```
 
-Abre `http://127.0.0.1:8001/login/`. `seed_demo` muestra la contraseña inicial y crea cuentas con los correos `admin@tecnostock.local`, `gerente@tecnostock.local`, `ventas@tecnostock.local` y `auditor@tecnostock.local`. En el primer acceso, cada cuenta configura una aplicación TOTP escaneando un código QR. La contraseña queda en `.env` si definiste `DEMO_PASSWORD`; nunca subas ese archivo.
-
-## Permisos
-
-| Rol | Alcance | Acciones |
-| --- | --- | --- |
-| Administrador | Todas las tiendas | Productos, reportes, usuarios y roles |
-| Gerente | Su tienda | Productos y reportes; no modifica otra tienda |
-| Ventas | Su tienda | Consulta productos y actualiza stock; no modifica precios |
-| Auditor | Todas las tiendas | Consulta productos y reportes; sin cambios |
-
-El registro aparece en la misma pantalla de inicio de sesión y crea cuentas con el rol inicial **Empleado de ventas**. Requiere correo único, nombre completo, tienda y contraseña de al menos ocho caracteres con mayúscula, número y símbolo. El administrador puede cambiar el rol y la tienda en **Equipo y roles**. Después de cinco contraseñas incorrectas para una cuenta existente, esta se bloquea por 15 minutos. El segundo factor admite tres intentos por acceso. Al verificarlo se emite un JWT de 15 minutos en una cookie HttpOnly; la ruta `/api/session/` valida el token y la sesión. Cada usuario puede poner un enlace HTTPS a su foto desde **Mi perfil**.
-
-## Activar Google y GitHub
-
-Los botones se muestran como pendientes hasta configurar aplicaciones OAuth. En los portales oficiales de cada proveedor, registra las siguientes URL de retorno para la ejecución local:
-
-- Google: `http://127.0.0.1:8001/accounts/google/login/callback/`
-- GitHub: `http://127.0.0.1:8001/accounts/github/login/callback/`
-
-Guarda `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `GITHUB_CLIENT_ID` y `GITHUB_CLIENT_SECRET` en `.env`; reinicia Django. Las cuentas sociales nuevas entran como **Ventas** en la primera tienda y pasan por el mismo segundo factor TOTP. Si Google devuelve un correo verificado que ya pertenece a una cuenta con correo verificado, ambas formas de acceso usan la misma cuenta y conservan su rol. También se pueden vincular Google y GitHub desde **Mi perfil**. Para evitar el error `redirect_uri_mismatch`, abre la aplicación con `127.0.0.1:8001` (la pantalla local de `localhost:8001` redirige allí).
-
-## Verificación
-
-```powershell
-.\.venv\Scripts\python.exe manage.py check
-.\.venv\Scripts\python.exe manage.py test
-```
-
-No se han desplegado recursos de AWS para el Laboratorio 8. La configuración OAuth necesita credenciales creadas en Google y GitHub; no se incluyen claves en el repositorio.
+Antes de iniciar, configura `DJANGO_SECRET_KEY` y `DJANGO_DEBUG=1` en `.env`. Para activar Google y GitHub, agrega allí sus credenciales OAuth; los retornos son `http://127.0.0.1:8001/accounts/google/login/callback/` y `http://127.0.0.1:8001/accounts/github/login/callback/`. El archivo `.env` y la base de datos local no se publican en GitHub.
